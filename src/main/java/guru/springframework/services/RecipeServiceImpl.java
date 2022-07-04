@@ -11,8 +11,9 @@ import java.util.Set;
  * Created by robertZ on 2022-07-03.
  */
 @Service
-public class RecipeServiceImpl implements RecipeService{
-    public final RecipeRepository recipeRepository;
+public class RecipeServiceImpl implements RecipeService {
+
+    private final RecipeRepository recipeRepository;
 
     public RecipeServiceImpl(RecipeRepository recipeRepository) {
         this.recipeRepository = recipeRepository;
@@ -21,7 +22,6 @@ public class RecipeServiceImpl implements RecipeService{
     @Override
     public Set<Recipe> getRecipes() {
         Set<Recipe> recipeSet = new HashSet<>();
-
         recipeRepository.findAll().iterator().forEachRemaining(recipeSet::add);
         return recipeSet;
     }

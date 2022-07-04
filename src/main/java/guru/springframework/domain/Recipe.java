@@ -23,18 +23,25 @@ public class Recipe {
 
     @Lob
     private String directions;
-    @Lob
-    private Byte[] image;
-    @Enumerated(value = EnumType.ORDINAL)
-    private Difficulty difficulty;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
     private Set<Ingredient> ingredients = new HashSet<>();
+
+    @Lob
+    private Byte[] image;
+
+    @Enumerated(value = EnumType.STRING)
+    private Difficulty difficulty;
+
     @OneToOne(cascade = CascadeType.ALL)
     private Notes notes;
+
     @ManyToMany
     @JoinTable(name = "recipe_category",
-            joinColumns = @JoinColumn(name = "recipe_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
+        joinColumns = @JoinColumn(name = "recipe_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Set<Category> categories = new HashSet<>();
+
     public Long getId() {
         return id;
     }
@@ -115,9 +122,10 @@ public class Recipe {
         this.notes = notes;
         notes.setRecipe(this);
     }
+
     public Recipe addIngredient(Ingredient ingredient){
         ingredient.setRecipe(this);
-        ingredients.add(ingredient);
+        this.ingredients.add(ingredient);
         return this;
     }
 
