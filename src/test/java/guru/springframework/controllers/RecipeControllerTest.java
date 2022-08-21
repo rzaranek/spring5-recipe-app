@@ -8,7 +8,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.ui.Model;
 
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
@@ -16,25 +15,26 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Created by robertZ on 2022-08-12.
+ * Created by jt on 6/19/17.
  */
 public class RecipeControllerTest {
-    RecipeController controller;
+
 
     @Mock
     RecipeService recipeService;
 
-    @Mock
-    Model model;
+    RecipeController controller;
 
     @Before
-    public void SetUp() throws Exception{
+    public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
+
         controller = new RecipeController(recipeService);
     }
 
     @Test
-    public void testGetRecipe() throws Exception{
+    public void testGetRecipe() throws Exception {
+
         Recipe recipe = new Recipe();
         recipe.setId(1L);
 
@@ -47,5 +47,4 @@ public class RecipeControllerTest {
                 .andExpect(view().name("recipe/show"))
                 .andExpect(model().attributeExists("recipe"));
     }
-
 }

@@ -21,10 +21,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 /**
- * Created by robertZ on 2022-07-10.
+ * Created by jt on 6/17/17.
  */
 public class IndexControllerTest {
-    IndexController indexController;
 
     @Mock
     RecipeService recipeService;
@@ -32,17 +31,18 @@ public class IndexControllerTest {
     @Mock
     Model model;
 
+    IndexController controller;
+
     @Before
     public void setUp() throws Exception {
-
         MockitoAnnotations.initMocks(this);
 
-        indexController = new IndexController(recipeService);
+        controller = new IndexController(recipeService);
     }
 
     @Test
     public void testMockMVC() throws Exception {
-        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(indexController).build();
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
@@ -50,7 +50,7 @@ public class IndexControllerTest {
     }
 
     @Test
-    public void getIndexPage() {
+    public void getIndexPage() throws Exception {
 
         //given
         Set<Recipe> recipes = new HashSet<>();
@@ -66,7 +66,8 @@ public class IndexControllerTest {
         ArgumentCaptor<Set<Recipe>> argumentCaptor = ArgumentCaptor.forClass(Set.class);
 
         //when
-        String viewName = indexController.getIndexPage(model);
+        String viewName = controller.getIndexPage(model);
+
 
         //then
         assertEquals("index", viewName);
@@ -75,4 +76,5 @@ public class IndexControllerTest {
         Set<Recipe> setInController = argumentCaptor.getValue();
         assertEquals(2, setInController.size());
     }
+
 }

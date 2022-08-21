@@ -6,15 +6,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Optional;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
- * Created by robertZ on 2022-07-11.
+ * Created by jt on 6/17/17.
  */
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -28,17 +27,19 @@ public class UnitOfMeasureRepositoryIT {
     }
 
     @Test
-    @DirtiesContext
-    public void findByDescription() throws Exception{
-        Optional<UnitOfMeasure> uomOptiona = unitOfMeasureRepository.findByDescription("Teaspoon");
+    public void findByDescription() throws Exception {
 
-        assertEquals("Teaspoon", uomOptiona.get().getDescription());
+        Optional<UnitOfMeasure> uomOptional = unitOfMeasureRepository.findByDescription("Teaspoon");
+
+        assertEquals("Teaspoon", uomOptional.get().getDescription());
     }
 
     @Test
-    public void findByDescriptionCup() throws Exception{
-        Optional<UnitOfMeasure> uomOptiona = unitOfMeasureRepository.findByDescription("Cup");
+    public void findByDescriptionCup() throws Exception {
 
-        assertEquals("Cup", uomOptiona.get().getDescription());
+        Optional<UnitOfMeasure> uomOptional = unitOfMeasureRepository.findByDescription("Cup");
+
+        assertEquals("Cup", uomOptional.get().getDescription());
     }
+
 }

@@ -1,5 +1,7 @@
 package guru.springframework.services;
 
+
+import guru.springframework.converters.*;
 import guru.springframework.domain.Recipe;
 import guru.springframework.repositories.RecipeRepository;
 import org.junit.Before;
@@ -15,9 +17,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.*;
 
-
 /**
- * Created by robertZ on 2022-07-10.
+ * Created by jt on 6/17/17.
  */
 public class RecipeServiceImplTest {
 
@@ -26,15 +27,18 @@ public class RecipeServiceImplTest {
     @Mock
     RecipeRepository recipeRepository;
 
+
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        recipeService = new RecipeServiceImpl(recipeRepository);
+        recipeService = new RecipeServiceImpl(recipeRepository,
+                new RecipeCommandToRecipe(new CategoryCommandToCategory(), new IngredientCommandToIngredient(new UnitOfMeasureCommandToUnitOfMeasure()), new NotesCommandToNotes()),
+                new RecipeToRecipeCommand(new CategoryToCategoryCommand(), new IngredientToIngredientCommand(new UnitOfMeasureToUnitOfMeasureCommand()), new NotesToNotesCommand()));
     }
 
     @Test
-    public void getRecipesByIdTest() throws Exception{
+    public void getRecipeByIdTest() throws Exception {
         Recipe recipe = new Recipe();
         recipe.setId(1L);
         Optional<Recipe> recipeOptional = Optional.of(recipe);
@@ -46,20 +50,22 @@ public class RecipeServiceImplTest {
         assertNotNull("Null recipe returned", recipeReturned);
         verify(recipeRepository, times(1)).findById(anyLong());
         verify(recipeRepository, never()).findAll();
-        assertEquals(1L, recipeReturned.getId().longValue());
     }
+
     @Test
-    public void getRecipes() throws Exception {
+    public void getRecipesTest() throws Exception {
 
-        HashSet recipesData = new HashSet();
-        recipesData.add(new Recipe());
+        Recipe recipe = new Recipe();
+        HashSet receipesData = new HashSet();
+        receipesData.add(recipe);
 
-        when(recipeRepository.findAll()).thenReturn(recipesData);
+        when(recipeService.getRecipes()).thenReturn(receipesData);
 
         Set<Recipe> recipes = recipeService.getRecipes();
 
-        assertEquals(1, recipes.size());
+        assertEquals(recipes.size(), 1);
         verify(recipeRepository, times(1)).findAll();
-
+        verify(recipeRepository, never()).findById(anyLong());
     }
+
 }
